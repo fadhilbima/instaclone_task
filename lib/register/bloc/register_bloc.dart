@@ -26,7 +26,31 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       }
     });
   }
+
+  bool? showPasswordRegist(bool? v) {
+    if(v == obscureRegist || v == !obscureRegist) {
+      obscureRegist=obscureRegist==false;
+      print(obscureRegist);
+    }
+  }
+
+  String? validateEmailRegist(String? v) {
+    if(v == null || v.isEmpty) {
+      return 'Email is empty';
+    }
+  }
+
+  String? validatePasswordRegist(String? v) {
+    if(v == null || v.isEmpty) {
+      return 'Blank password';
+    }
+    if(v.length < 8) {
+      return 'Password must be 8 character';
+    }
+  }
+
   final formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
+  bool obscureRegist = true;
 }

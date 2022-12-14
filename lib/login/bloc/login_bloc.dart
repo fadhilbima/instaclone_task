@@ -13,6 +13,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   String email = '';
   String password = '';
   final formKey = GlobalKey<FormState>();
+  bool obscureLogin = true;
   LoginBloc() : super(LoginInitial()) {
     on<SubmitLogin>((event, emit) async {
       if(formKey.currentState!.validate()){
@@ -33,5 +34,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<NoAccountEvent>((event, emit) async {
       emit(NoAccount());
     });
+  }
+
+  bool? showPasswordLogin(bool? v) {
+    if(v == obscureLogin || v == !obscureLogin) {
+      obscureLogin=obscureLogin==false;
+      print(obscureLogin);
+    }
+    return null;
+  }
+
+  String? validateEmailLogin(String? icon) {
+    if(icon == null || icon.isEmpty) {
+      return 'Email is empty';
+    }
+  }
+
+  String? validatePasswordLogin(String? icon) {
+    if(icon == null || icon.isEmpty) {
+      return 'Blank password';
+    }
+    if(icon.length < 8) {
+      return 'Password must be 8 character';
+    }
   }
 }

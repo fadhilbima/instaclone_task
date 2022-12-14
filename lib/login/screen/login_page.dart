@@ -17,9 +17,14 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+class LoginView extends StatefulWidget {
+  LoginView({Key? key}) : super(key: key);
 
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -102,27 +107,32 @@ class LoginView extends StatelessWidget {
                           onSaved: (v) {
                             context.read<LoginBloc>().email = v ?? '';
                           },
-                          validator: (v) {
-                            if(v == null || v.isEmpty) {
-                              return 'No email?';
-                            }
-                          },
+                          validator: context.read<LoginBloc>().validateEmailLogin,
                         ),
                         SizedBox(height: 10),
                         TextFormField(
+                          obscureText: context.read<LoginBloc>().obscureLogin,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12)),
-                              hintText: 'Password'
+                              hintText: 'Password',
+                            suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  context.read<LoginBloc>().showPasswordLogin(
+                                    context.read<LoginBloc>().obscureLogin,
+                                  );
+                                });
+                              },
+                              child: context.read<LoginBloc>().obscureLogin
+                                  ? Icon(Icons.remove_red_eye_outlined)
+                                  : Icon(Icons.remove_red_eye),
+                            )
                           ),
                           onSaved: (v) {
                             context.read<LoginBloc>().password = v ?? '';
                           },
-                          validator: (v) {
-                            if(v == null || v.isEmpty) {
-                              return 'Blank password';
-                            }
-                          },
+                          validator: context.read<LoginBloc>().validatePasswordLogin,
                         ),
                         SizedBox(height: 10),
                         ElevatedButton(
