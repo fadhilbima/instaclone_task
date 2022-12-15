@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instaclone/display_post/bloc/show_post_bloc.dart';
+import 'package:instaclone/home/display_post/bloc/show_post_bloc.dart';
 
 class ShowPost extends StatelessWidget {
   const ShowPost({Key? key}) : super(key: key);
@@ -20,9 +20,6 @@ class ShowPostView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Whole Post'),
-      ),
       body: BlocBuilder<ShowPostBloc, ShowPostState> (
         builder: (context, state) {
           if(state is ShowPostLoaded) {

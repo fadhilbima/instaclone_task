@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instaclone/login/bloc/login_bloc.dart';
 import 'package:instaclone/register/register.dart';
 
-import '../../home/home_page.dart';
+import '../../home/home_main.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -46,7 +46,7 @@ class _LoginViewState extends State<LoginView> {
           );
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-            return const HomePage();
+            return HomePage();
           }));
         }
         if (state is NoAccount) {

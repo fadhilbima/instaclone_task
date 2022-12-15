@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instaclone/login/login.dart';
+import 'package:instaclone/login/screen/login_page.dart';
 import 'package:instaclone/routes/blocs/auth/auth_bloc.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+
+class LogoutButton extends StatelessWidget {
+  const LogoutButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,16 +14,13 @@ class HomePage extends StatelessWidget {
         if(state is AuthLoggedout) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const LoginScreen()
-            ));
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const LoginScreen()
+              ));
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Home Page'),
-        ),
         body: Center(
           child: ElevatedButton(
             onPressed: () {
