@@ -1,6 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instaclone/home/add_post/bloc/add_post_bloc.dart';
+import 'package:instaclone/home/camera/screens/camera_page.dart';
 
 class AddPost extends StatelessWidget {
   const AddPost({Key? key}) : super(key: key);
@@ -92,8 +94,11 @@ class AddView extends StatelessWidget {
 
                     },
                     child: TextButton.icon(
-                      onPressed: (){
-
+                      onPressed: () async {
+                        await availableCameras().then((value) => Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (_) => CameraPage(cameras: value)),
+                        ));
                       },
                       icon: Icon(Icons.camera, color: Colors.white,),
                       label: Text('Take a shot', style: TextStyle(color: Colors.white),),
