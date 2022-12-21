@@ -61,9 +61,28 @@ class ShowPostView extends StatelessWidget {
                           e.imageUrl,
                           fit: BoxFit.fitWidth,
                         ),
-                        SizedBox(height: 10),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+
+                                },
+                                child: Icon(Icons.favorite_border_rounded, size: 35,),
+                              ),
+                              SizedBox(width: 10),
+                              InkWell(
+                                onTap: () {
+
+                                },
+                                child: Icon(Icons.comment_outlined, size: 35,),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
                           child: Text.rich(
                             TextSpan(
                               text: e.username,

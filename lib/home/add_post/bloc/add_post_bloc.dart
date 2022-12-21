@@ -32,8 +32,8 @@ class AddPostBloc extends Bloc<AddPostEvent, AddPostState> {
       final user = firebaseAuth.currentUser;
       uidInput.text = user!.uid;
       usernameInput.text = user.email!;
-      avatarUrlInput.text = 'https://www.pngitem.com/pimgs/m/168-1689599_male-user-filled-icon-user-icon-100-x.png';
-      imageUrlInput.text = 'https://placeimg.com/600/600/people';
+      avatarUrlInput.text = '';
+      imageUrlInput.text = '';
       captionInput.text = 'Welcome';
     });
   }

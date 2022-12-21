@@ -1,18 +1,22 @@
-import 'package:camera/camera.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instaclone/home/add_post/bloc/add_post_bloc.dart';
 import 'package:instaclone/home/camera/screens/camera_page.dart';
+import 'package:instaclone/home/display_post/screens/show_post.dart';
+import 'package:instaclone/home/home_main.dart';
+import 'package:instaclone/home/upload_pict/upload_bloc.dart';
 
 class AddPost extends StatelessWidget {
   const AddPost({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-      AddPostBloc()
-        ..add(Initialize()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AddPostBloc()..add(Initialize()),),
+        BlocProvider(create: (context) => UploadBloc())
+      ],
       child: AddView(),
     );
   }
@@ -25,7 +29,7 @@ class AddView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AddPostBloc, AddPostState>(
       listener: (context, state) {
-
+        print(state);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -65,18 +69,28 @@ class AddView extends StatelessWidget {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)
                       ),
-                      hintText: 'Avatar',
+                      hintText: 'Put an Avatar',
                     ),
                   ),
                   SizedBox(height: 10),
-                  TextFormField(
-                    controller: context.read<AddPostBloc>().imageUrlInput,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)
-                      ),
-                      hintText: 'Image',
-                    ),
+                  BlocConsumer<UploadBloc, UploadState>(
+                    listener: (context, state) {
+                      print(state);
+                      if(state is UploadSuccess) {
+                        context.read<AddPostBloc>().imageUrlInput.text = state.fileUrl;
+                      }
+                      if (state is UploadLoading) {
+                        context.read<AddPostBloc>().imageUrlInput.text = 'Loadaing img...';
+                      }
+                    },
+                    builder: (context, state) {
+                      return TextFormField(
+                        controller: context.read<AddPostBloc>().imageUrlInput,
+                        decoration: InputDecoration(
+                          hintText: 'Image',
+                        ),
+                      );
+                    }
                   ),
                   SizedBox(height: 10),
                   TextFormField(
@@ -85,29 +99,19 @@ class AddView extends StatelessWidget {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)
                       ),
-                      hintText: 'Caption',
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: (){
-
-                    },
-                    child: TextButton.icon(
-                      onPressed: () async {
-                        await availableCameras().then((value) => Navigator.push(
-                          context, 
-                          MaterialPageRoute(builder: (_) => CameraPage(cameras: value)),
-                        ));
-                      },
-                      icon: Icon(Icons.camera, color: Colors.white,),
-                      label: Text('Take a shot', style: TextStyle(color: Colors.white),),
+                      hintText: 'Put a caption',
                     ),
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       context.read<AddPostBloc>().add(SubmitPost());
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(),
+                        ), (route) => false,
+                      );
                     },
                     child: Text('Submit'),
                   )
@@ -115,9 +119,23 @@ class AddView extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Camera(),
+              ),
+            ).then((value) {
+              if (value != null && value is File) {
+                context.read<UploadBloc>().uploaded(value);
+              }
+            });
+          },
+          child: Icon(Icons.camera_alt),
+        ),
       ),
     );
   }
 }
-

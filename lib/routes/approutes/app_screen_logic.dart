@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instaclone/home/camera/camera.dart';
 import 'package:instaclone/home/home_global_bloc/home_bloc.dart';
 import 'package:instaclone/home/home_main.dart';
 import 'package:instaclone/login/screen/login_page.dart';
